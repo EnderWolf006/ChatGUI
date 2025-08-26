@@ -1,4 +1,5 @@
 import 'package:chat_gui/app/pages/chat/chat_screen.dart';
+import 'package:chat_gui/app/pages/chat/controller.dart';
 import 'package:get/get.dart';
 import 'app_routes.dart';
 

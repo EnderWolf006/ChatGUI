@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:forui/forui.dart';
 
 import 'app/routes/app_pages.dart';
-import 'app/store/app_store.dart';
+import 'store/app_store.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,12 +20,22 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Chat GUI',
-      initialRoute: AppPages.initial,
-      getPages: AppPages.routes,
-      builder: (context, child) => FTheme(data: FThemes.zinc.light, child: child!),
+    return Obx(
+      () => GetMaterialApp(
+        title: 'Chat GUI',
+        themeMode: store.enableDarkMode.value ? ThemeMode.dark : ThemeMode.light,
+        debugShowCheckedModeBanner: false,
+        initialRoute: AppPages.initial,
+        getPages: AppPages.routes,
+        builder:
+            (context, child) => FTheme(
+              data: store.enableDarkMode.value ? FThemes.zinc.dark : FThemes.zinc.light,
+              child: Material(
+                color: FThemeBuildContext(context).theme.colors.background,
+                child: child!,
+              ),
+            ),
+      ),
     );
   }
 }
