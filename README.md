@@ -1,3 +1,3 @@
-# chat_gui
+# ChatGUI
 
-A new Flutter project.
+> A Flutter-based AI client, featuring a ChatGPT-like beautiful UI.
