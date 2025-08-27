@@ -1,4 +1,4 @@
-import 'package:chat_gui/app/components/interactive_drawer.dart';
+import 'package:chat_gui/components/interactive_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

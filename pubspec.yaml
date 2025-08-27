@@ -11,8 +11,8 @@ dependencies:
     sdk: flutter
 
   get: ^4.7.2
-  forui: ^0.15.1
   get_storage: ^2.1.1
+  lucide_icons_flutter: ^3.0.9
     
 dev_dependencies:
   flutter_test:

@@ -1,19 +1,18 @@
 import 'dart:ui';
 
-import 'package:chat_gui/app/pages/chat/controller.dart';
+import 'package:chat_gui/pages/chat/controller.dart';
 import 'package:flutter/material.dart';
-import 'package:forui/forui.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ChatDrawer extends GetView<ChatScreenController> {
   const ChatDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = FThemeBuildContext(context).theme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Material(
-      color: theme.colors.background,
+      color: colorScheme.surface,
       child: SafeArea(
         right: false,
         bottom: false,
@@ -21,48 +20,67 @@ class ChatDrawer extends GetView<ChatScreenController> {
           children: [
             Column(
               children: [
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     children: [
                       Expanded(
-                        child: FTextField(
-                          hint: 'Search...',
-                          prefixBuilder: (context, style, states) {
-                            return FButton.icon(
-                              onPress: () {},
-                              style: FButtonStyle.ghost(),
-                              child: Icon(
-                                FIcons.search,
-                                size: 22,
-                                color: theme.colors.foreground.withAlpha(200),
+                        child: Stack(
+                          children: [
+                            TextField(
+                              controller: controller.inputController,
+                              decoration: InputDecoration(
+                                hintText: 'Ask anything...',
+                                contentPadding: EdgeInsets.only(
+                                  left: 11 + 32,
+                                  right: 11,
+                                  top: 9,
+                                  bottom: 9,
+                                ),
                               ),
-                            );
-                          },
+                            ),
+                            Positioned(
+                              left: 5,
+                              top: 5,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(LucideIcons.search),
+                                padding: EdgeInsets.all(4),
+                                constraints: BoxConstraints(),
+                                style: IconButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.secondary,
+                                  foregroundColor:
+                                      Theme.of(context).colorScheme.onSecondary,
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(width: 16.0),
-                      FButton.icon(
-                        onPress: () => {},
-                        style: FButtonStyle.ghost(),
-                        child: Icon(FIcons.squarePen, size: 22),
+                      const SizedBox(width: 16.0),
+                      IconButton(
+                        onPressed: () {},
+                        padding: EdgeInsets.all(9),
+                        icon: const Icon(LucideIcons.squarePen),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 ListTile(
                   title: Text(
                     'New chat',
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      color: theme.colors.foreground,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                   leading: Icon(
-                    FIcons.plus,
-                    color: theme.colors.foreground.withAlpha(200),
+                    LucideIcons.squarePen,
+                    color: colorScheme.onSurface.withAlpha(200),
                   ),
                   onTap: () {
                     print(11);
@@ -74,28 +92,27 @@ class ChatDrawer extends GetView<ChatScreenController> {
                     'Assistant',
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      color: theme.colors.foreground,
+                      color: colorScheme.onSurface,
                     ),
                   ),
-
                   leading: Icon(
-                    FIcons.bot,
-                    color: theme.colors.foreground.withAlpha(200),
+                    LucideIcons.bot,
+                    color: colorScheme.onSurface.withAlpha(200),
                   ),
                   onTap: () {},
                   minTileHeight: 48,
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Expanded(
                   child: ListView(
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.symmetric(horizontal: 0),
                     children: [
                       for (var i = 0; i < 145; i++)
                         ListTile(
                           title: Text(
                             'History Title $i',
-                            style: TextStyle(color: theme.colors.foreground),
+                            style: TextStyle(color: colorScheme.onSurface),
                           ),
                           onTap: () {},
                           minTileHeight: 48,
@@ -116,16 +133,14 @@ class ChatDrawer extends GetView<ChatScreenController> {
                     padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewPadding.bottom,
                     ),
-                    decoration: BoxDecoration(
-                      color: theme.colors.background.withAlpha(128),
-                    ),
+                    decoration: BoxDecoration(color: colorScheme.surface.withAlpha(128)),
                     child: ListTile(
                       title: Text(
                         "Guest User",
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 18,
-                          color: theme.colors.foreground,
+                          color: colorScheme.onSurface,
                         ),
                       ),
                       leading: Container(

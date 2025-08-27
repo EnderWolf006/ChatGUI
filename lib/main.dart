@@ -1,9 +1,10 @@
+import 'package:chat_gui/theme/app_theme.dart';
+import 'package:chat_gui/utils/cxxxr.dart';
 import 'package:chat_gui/utils/rx_persist.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:forui/forui.dart';
 
-import 'app/routes/app_pages.dart';
+import 'routes/app_pages.dart';
 import 'store/app_store.dart';
 
 Future<void> main() async {
@@ -23,18 +24,12 @@ class MainApp extends StatelessWidget {
     return Obx(
       () => GetMaterialApp(
         title: 'Chat GUI',
-        themeMode: store.enableDarkMode.value ? ThemeMode.dark : ThemeMode.light,
+        themeMode: store.themeMode.value,
         debugShowCheckedModeBanner: false,
+        theme: lightTheme,
+        darkTheme: darkTheme,
         initialRoute: AppPages.initial,
         getPages: AppPages.routes,
-        builder:
-            (context, child) => FTheme(
-              data: store.enableDarkMode.value ? FThemes.zinc.dark : FThemes.zinc.light,
-              child: Material(
-                color: FThemeBuildContext(context).theme.colors.background,
-                child: child!,
-              ),
-            ),
       ),
     );
   }
