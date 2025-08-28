@@ -34,6 +34,11 @@ class ChatInput extends GetView<ChatScreenController> {
                       controller: controller.inputController,
                       maxLines: 8,
                       minLines: 1,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.onSurface,
+                        height: 1.5,
+                      ),
                       decoration: InputDecoration(
                         hintText: 'chat.input.placeholder'.tr,
                         contentPadding: EdgeInsets.only(

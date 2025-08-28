@@ -24,7 +24,7 @@ class ChatContent extends GetView<ChatScreenController> {
               physics: const BouncingScrollPhysics(),
               children:
                   [
-                    for (var i = 0; i < 16; i++)
+                    for (var i = 0; i < 1; i++)
                       [
                         ChatContentUserBubble(constraints),
                         SizedBox(height: 12),
