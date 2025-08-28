@@ -1,0 +1,24 @@
+{
+  "i18n": {
+    "chinese": {
+      "cn": "简体中文"
+    },
+    "english": {
+      "us": "英语（美国）"
+    }
+  },
+  "chat": {
+    "drawer": {
+      "actionButton": {
+        "assistant": "助手",
+        "newChat": "新聊天"
+      },
+      "search": {
+        "placeholder": "搜索"
+      }
+    },
+    "input": {
+      "placeholder": "问询任何问题"
+    }
+  }
+}

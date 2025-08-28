@@ -31,7 +31,7 @@ class ChatDrawer extends GetView<ChatScreenController> {
                             TextField(
                               controller: controller.inputController,
                               decoration: InputDecoration(
-                                hintText: 'Ask anything...',
+                                hintText: 'chat.drawer.search.placeholder'.tr,
                                 contentPadding: EdgeInsets.only(
                                   left: 11 + 32,
                                   right: 11,
@@ -72,7 +72,7 @@ class ChatDrawer extends GetView<ChatScreenController> {
                 const SizedBox(height: 8),
                 ListTile(
                   title: Text(
-                    'New chat',
+                    'chat.drawer.actionButton.newChat'.tr,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       color: colorScheme.onSurface,
@@ -89,7 +89,7 @@ class ChatDrawer extends GetView<ChatScreenController> {
                 ),
                 ListTile(
                   title: Text(
-                    'Assistant',
+                    'chat.drawer.actionButton.assistant'.tr,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       color: colorScheme.onSurface,

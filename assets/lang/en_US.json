@@ -1,0 +1,24 @@
+{
+  "chat": {
+    "input": {
+      "placeholder": "Ask anything..."
+    },
+    "drawer": {
+      "search": {
+        "placeholder": "Search..."
+      },
+      "actionButton": {
+        "newChat": "New Chat",
+        "assistant": "Assistant"
+      }
+    }
+  },
+  "i18n": {
+    "chinese": {
+      "cn": "Chinese (Simplified)"
+    },
+    "english": {
+      "us": "English (United States)"
+    }
+  }
+}

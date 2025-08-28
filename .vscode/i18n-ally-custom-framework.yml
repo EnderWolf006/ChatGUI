@@ -1,0 +1,10 @@
+languageIds:
+  - dart
+
+usageMatchRegex:
+  - "['\"`]({key})['\"`]\\s*\\.tr\\b"
+  - "['\"]({key})['\"]\\s*\\.\\s*trArgs\\s*\\("
+  - "['\"]({key})['\"]\\s*\\.\\s*trParams\\s*\\("
+
+# 不要屏蔽内置框架
+monopoly: false

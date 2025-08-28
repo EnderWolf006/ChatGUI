@@ -35,7 +35,7 @@ class ChatInput extends GetView<ChatScreenController> {
                       maxLines: 8,
                       minLines: 1,
                       decoration: InputDecoration(
-                        hintText: 'Ask anything...',
+                        hintText: 'chat.input.placeholder'.tr,
                         contentPadding: EdgeInsets.only(
                           left: 11,
                           right: 11 + 32,
