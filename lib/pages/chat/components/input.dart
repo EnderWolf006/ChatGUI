@@ -66,19 +66,22 @@ class ChatInput extends GetView<ChatScreenController> {
           ),
           Obx(() {
             final text = controller.inputText.value;
-            if (text.length / 20 + text.split('\n').length <= 8) {
+            if (text.length / 36 + text.split('\n').length <= 8) {
               return const SizedBox.shrink();
             }
             return Positioned(
-              top: -3,
-              right: -3,
+              top: 5,
+              right: 5,
               child: IconButton(
                 tooltip: 'Expand',
                 onPressed: () {},
                 iconSize: 16,
                 icon: const Icon(LucideIcons.maximize2),
-                padding: EdgeInsets.all(4),
+                padding: EdgeInsets.all(8),
                 constraints: BoxConstraints(),
+                style: IconButton.styleFrom(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
               ),
             );
           }),

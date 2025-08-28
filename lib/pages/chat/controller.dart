@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ChatScreenController extends GetxController {
-  late ScrollController scrollController;
+  late final ScrollController scrollController;
 
-  late TextEditingController inputController;
+  late final TextEditingController inputController;
   final RxString inputText = ''.obs;
 
-  late InteractiveDrawerController drawerController;
-  var scrollOffsetPercent = 0.0.obs;
+  late final InteractiveDrawerController drawerController;
+  final scrollOffsetPercent = 0.0.obs;
 
   @override
   void onInit() {

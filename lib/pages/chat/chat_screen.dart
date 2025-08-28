@@ -28,7 +28,7 @@ class ChatScreen extends GetView<ChatScreenController> {
             child: TextButton.icon(
               onPressed: () {},
               label: const Text(
-                'Gemini-2.5-pro-max-ultra--',
+                'Gemini-2.5-pro-max-ultra',
                 maxLines: 1,
                 style: TextStyle(
                   fontSize: 18,
@@ -63,6 +63,7 @@ class ChatScreen extends GetView<ChatScreenController> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
+              flex: 1,
               child: Obx(
                 () => AnimatedContainer(
                   duration: const Duration(milliseconds: 328),
@@ -71,12 +72,12 @@ class ChatScreen extends GetView<ChatScreenController> {
                     border: Border(
                       top:
                           controller.scrollOffsetPercent.value < 1
-                              ? BorderSide(color: C.g1.r, width: 1)
-                              : BorderSide(color: C.g1.r.withAlpha(0), width: 1),
+                              ? BorderSide(color: C.g2.r.withAlpha(160), width: 1)
+                              : BorderSide(color: C.g2.r.withAlpha(0), width: 1),
                       bottom:
                           controller.scrollOffsetPercent.value > 0
-                              ? BorderSide(color: C.g1.r, width: 1)
-                              : BorderSide(color: C.g1.r.withAlpha(0), width: 1),
+                              ? BorderSide(color: C.g2.r.withAlpha(160), width: 1)
+                              : BorderSide(color: C.g2.r.withAlpha(0), width: 1),
                     ),
                   ),
                   child: const ChatContent(),
