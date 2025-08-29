@@ -97,7 +97,7 @@ class InteractiveDrawer extends StatefulWidget {
     this.scrimColor = Colors.black,
     this.maxScrimOpacity = 0.5,
     this.barrierDismissible = true,
-    this.elevation = 16.0,
+    this.elevation = 1.5,
     this.semanticLabel,
     this.enableDrawerTapToClose = false,
     this.tabletMode = false,

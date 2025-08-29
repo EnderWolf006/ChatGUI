@@ -5,35 +5,45 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ChatContent extends GetView<ChatScreenController> {
-  const ChatContent({super.key});
+  final int tabletWidth;
+  const ChatContent({super.key, required this.tabletWidth});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Align(
-            alignment: Alignment.topCenter,
-            child: ListView(
-              shrinkWrap: true,
-              reverse: true,
-              padding: EdgeInsets.zero,
-              controller: controller.scrollController,
-              physics: const BouncingScrollPhysics(),
-              children:
-                  [
-                    for (var i = 0; i < 1; i++)
-                      [
-                        ChatContentUserBubble(constraints),
-                        SizedBox(height: 12),
-                        ChatContentAssistantBubble(constraints),
-                        SizedBox(height: 12),
-                      ],
-                  ].expand((e) => e).toList().reversed.toList(),
+      child: SingleChildScrollView(
+        reverse: true,
+        padding: EdgeInsets.zero,
+        controller: controller.scrollController,
+        physics: const BouncingScrollPhysics(),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints:
+                tabletWidth > 0
+                    ? BoxConstraints(maxWidth: tabletWidth.toDouble())
+                    : BoxConstraints(),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ...[
+                      for (var i = 0; i < 2; i++)
+                        [
+                          ChatContentUserBubble(constraints),
+                          SizedBox(height: 12),
+                          ChatContentAssistantBubble(constraints),
+                          SizedBox(height: 12),
+                        ],
+                    ].expand((e) => e),
+                  ],
+                );
+              },
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

@@ -43,6 +43,7 @@ class ChatScreen extends GetView<ChatScreenController> {
         bottomNavigationBar: SizedBox(height: MediaQuery.of(context).padding.bottom),
         appBar: AppBar(
           titleSpacing: -6,
+          actionsPadding: const EdgeInsets.only(right: 6),
           title: Padding(
             padding: const EdgeInsets.only(right: 10),
             child: TextButton.icon(
@@ -100,16 +101,7 @@ class ChatScreen extends GetView<ChatScreenController> {
                               : BorderSide(color: C.g2.r.withAlpha(0), width: 1),
                     ),
                   ),
-                  child: Align(
-                    alignment: AlignmentGeometry.center,
-                    child: ConstrainedBox(
-                      constraints:
-                          isTablet && tabletWidth > 0
-                              ? BoxConstraints(maxWidth: tabletWidth.toDouble())
-                              : BoxConstraints(),
-                      child: const ChatContent(),
-                    ),
-                  ),
+                  child: ChatContent(tabletWidth: tabletWidth),
                 ),
               ),
             ),
