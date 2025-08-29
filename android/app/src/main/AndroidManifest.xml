@@ -1,4 +1,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <queries>
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="sms" />
+    </intent>
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="tel" />
+    </intent>
+    <intent>
+        <action android:name="android.support.customtabs.action.CustomTabsService" />
+    </intent>
+    </queries>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <application
         android:label="ChatGUI"
         android:name="${applicationName}"

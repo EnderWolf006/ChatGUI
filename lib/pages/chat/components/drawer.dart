@@ -103,7 +103,6 @@ class ChatDrawer extends GetView<ChatScreenController> {
                             color: colorScheme.onSurface.withAlpha(200),
                           ),
                           onTap: () {
-                            print(11);
                           },
                           minTileHeight: 48,
                         ),

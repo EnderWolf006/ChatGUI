@@ -21,7 +21,7 @@ class ChatInput extends GetView<ChatScreenController> {
                 children: [
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(LucideIcons.images),
+                    icon: const Icon(LucideIcons.plus),
                     style: IconButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                       foregroundColor: Theme.of(context).colorScheme.onSecondary,

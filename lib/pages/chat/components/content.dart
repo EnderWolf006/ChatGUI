@@ -30,7 +30,7 @@ class ChatContent extends GetView<ChatScreenController> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ...[
-                      for (var i = 0; i < 2; i++)
+                      for (var i = 0; i < 11; i++)
                         [
                           ChatContentUserBubble(constraints),
                           SizedBox(height: 12),
@@ -101,221 +101,66 @@ class ChatContentActionButtons extends GetView<ChatScreenController> {
   }
 }
 
-const testMd = r'''This is a sample markdown document.
-* **bold**
-* *italic*
-* **_bold and italic_**
-* ~~strikethrough~~
-* `code`
-* [link](https://www.google.com)
+const testMd = r'''## 二级标题
 
-[![alt text](https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png)](link_url)
-```markdown
-# Complex Markdown Document for Testing
+### 三级标题
 
-This document is designed to **challenge** your `gpt_markdown` package by incorporating a wide variety of Markdown components including headers, lists, tables, code blocks, blockquotes, footnotes, and LaTeX math expressions.
+#### 四级标题
 
----
+##### 五级标题
 
-## Table of Contents
-1. [Headers and Emphasis](#headers-and-emphasis)
-2. [Lists](#lists)
-3. [Code Blocks and Inline Code](#code-blocks-and-inline-code)
-4. [Tables](#tables)
-5. [Blockquotes and Nested Elements](#blockquotes-and-nested-elements)
-6. [Mathematical Expressions](#mathematical-expressions)
-7. [Links and Images](#links-and-images)
-8. [Footnotes](#footnotes)
-9. [Horizontal Rules and Miscellaneous](#horizontal-rules-and-miscellaneous)
+###### 六级标题
 
----
+这是一段普通文字：
 
-## Headers and Emphasis
+予观夫巴陵胜状，在洞庭一湖。衔远山，吞长江，浩浩汤汤，横无际涯；朝晖夕阴，气象万千。此则岳阳楼之大观也，前人之述备矣。然则北通巫峡，南极潇湘，迁客骚人，多会于此，览物之情，得无异乎？若夫霪雨霏霏，连月不开，阴风怒号，浊浪排空；日星隐曜，山岳潜形；商旅不行，樯倾楫摧；薄暮冥冥，虎啸猿啼。登斯楼也，则有去国怀乡，忧谗畏讥，满目萧然，感极而悲者矣。至若春和景明，波澜不惊，上下天光，一碧万顷；沙鸥翔集，锦鳞游泳；岸芷汀兰，郁郁青青。而或长烟一空，皓月千里，浮光跃金，静影沉璧，渔歌互答，此乐何极！登斯楼也，则有心旷神怡，宠辱偕忘，把酒临风，其喜洋洋者矣。
 
-### Header Levels
-Markdown supports multiple header levels:
-- `# Header 1`
-- `## Header 2`
-- `### Header 3`
-- `#### Header 4`
-- `##### Header 5`
-- `###### Header 6`
+这是**加粗**，*斜体*，~~删除线~~，[链接](https://blog.imalan.cn)。
 
-### Emphasis Examples
-- *Italicized text* using single asterisks or underscores.
-- **Bold text** using double asterisks or underscores.
-- ***Bold and italic*** by combining them.
-- ~~Strikethrough~~ text using two tildes.
+这是块引用与嵌套块引用：
 
----
+> 安得广厦千万间，大庇天下寒士俱欢颜！风雨不动安如山。
+> > 呜呼！何时眼前突兀见此屋，吾庐独破受冻死亦足！
 
-## Lists
+这是行内代码：`int a=1;`。这是代码块：
 
-### Unordered List
-- Item 1
-  - Nested Item 1.1
-  - Nested Item 1.2
-    - Deeply Nested Item 1.2.1
-- Item 2
-  - [ ] Task not completed
-  - [x] Task completed
-
-### Ordered List
-1. First item
-2. Second item with nested list:
-   1. Subitem 2.1
-   2. Subitem 2.2
-3. Third item
-
-### Mixed List Example
-- **Fruits**
-  1. Apple
-  2. Banana
-  3. Cherry
-- **Vegetables**
-  - Carrot
-  - Lettuce
-  - Spinach
-
----
-
-## Code Blocks and Inline Code
-
-### Inline Code
-Here is an example of inline code: `print("Hello, world!")`.
-
-### Fenced Code Block (Python)
-```python
-def greet(name):
-    """
-    Greets a person with the provided name.
-    """
-    print(f"Hello, {name}!")
-
-greet("Alice")
-```
-
-### Fenced Code Block (JavaScript)
-```javascript
-function greet(name) {
-    console.log(`Hello, ${name}!`);
+```c++
+int main(int argc , char** argv){
+    std::cout << "Hello World!\n";
+    return 0;
 }
-greet("Bob");
 ```
 
----
+这是无序列表：
 
-## Tables
+* 苹果
+    * 红将军
+    * 元帅
+* 香蕉
+* 梨
 
-Here is a table demonstrating various elements:
+这是有序列表：
 
-| Syntax      | Description                              | Example                           |
-| ----------- | ---------------------------------------- | --------------------------------- |
-| Header      | Title                                    | **Bold Header**                   |
-| Paragraph   | Text with *italic* and **bold** elements | This is a sample paragraph.       |
-| Inline Code | `code snippet`                           | `let x = 10;`                     |
+1. 打开冰箱
+    1. 右手放在冰箱门拉手上
+    2. 左手扶住冰箱主体
+    3. 右手向后用力
+2. 把大象放进冰箱
+3. 关上冰箱
 
-Additional table with alignment:
+这是行内公式：$m\times n$，这是块级公式：
 
-| Left Align | Center Align | Right Align |
-| :--------- |:------------:| ----------:|
-| Row 1      | Row 1        | Row 1      |
-| Row 2      | Row 2        | Row 2      |
+$C_{m\times k}=A_{m\times n}\cdot B_{n\times k}$
 
----
+这是一张图片：
 
-## Blockquotes and Nested Elements
+![1fa0f7b958d4234db58eac4f75318d7b.jpeg](https://cdn.imalan.cn/img/post/2934349b033b5bb5a19efc7233d3d539b700bcf5.jpg)
 
-> **Blockquote Header**
-> 
-> This is a blockquote. You can include **bold** and *italic* text, as well as `inline code` within blockquotes.
-> 
-> > ### Nested Blockquote
-> > - Nested list item 1
-> > - Nested list item 2
-> >   1. Numbered subitem 1
-> >   2. Numbered subitem 2
-> > 
-> > ```python
-> > # Code snippet inside nested blockquote
-> > for i in range(3):
-> >     print(i)
-> > ```
-> 
-> Back to the outer blockquote.
+这是表格：
 
----
+|表格|第一格表头 | 第二格表头|
+|--------- | -------------|------------|
+|内容单元格 |第一列第一格 | 内容单元格第二列第一格|
+|内容单元格 |第一列第二格 多加文字 | 内容单元格第二列第二格|
 
-## Mathematical Expressions
-
-### Inline Math
-You can write inline math using the `\( ... \)` syntax. For example, the quadratic formula is given by:
-\( x = \frac{-b \pm \sqrt{b^2-4ac}}{2a} \).
-
-### Display Math
-Display math can be rendered using the `\[ ... \]` syntax. For example, consider the integral:
-\[
-\int_{-\infty}^{\infty} e^{-x^2} \, dx = \sqrt{\pi}
-\]
-
-More complex display equations:
-\[
-E = mc^2 \quad \text{and} \quad F = ma
-\]
-
----
-
-## Links and Images
-
-### Links
-Here are examples of links:
-- [OpenAI](https://www.openai.com)
-- [GitHub](https://github.com)
-
-### Images
-Inline images can be embedded as follows:
-![Alt Text for Image](https://via.placeholder.com/150 "Image Title")
-
-Images can also be referenced with links:
-[![Linked Image](https://via.placeholder.com/100 "Thumbnail")](https://via.placeholder.com/500 "Full Image")
-
----
-
-## Footnotes
-
-Here is a statement with a footnote.[^1] Another reference can be added here.[^long]
-
-[^1]: This is a simple footnote.
-[^long]: This footnote contains a longer explanation to showcase how multiple lines can be formatted in a footnote. It supports Markdown formatting such as **bold** and *italic* text.
-
----
-
-## Horizontal Rules and Miscellaneous
-
-Horizontal rules can be used to separate sections:
-
----
-
-### Task List Example
-- [x] Write complex Markdown document
-- [x] Include LaTeX math expressions
-- [ ] Add more Markdown components if needed
-
-### Nested Quotes with Code and Math
-> **Example of Nested Components**
-> 
-> - Inline code: `sum = a + b`
-> - Math expression: \( \sum_{i=1}^n i = \frac{n(n+1)}{2} \)
-> - More text with **bold** formatting.
-> 
-> ```javascript
-> // JavaScript code example inside a nested blockquote
-> const sum = (n) => (n * (n + 1)) / 2;
-> console.log(sum(10));
-> ```
-
----
-
-## Conclusion
-
-This document was created to test the robustness of Markdown parsers and to ensure that all components, including advanced LaTeX expressions and nested structures, are rendered correctly. Enjoy testing and feel free to extend it further!''';
+------''';

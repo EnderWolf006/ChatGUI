@@ -1,4 +1,5 @@
 import 'package:chat_gui/utils/cxxxr.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_highlight/themes/atom-one-dark.dart';
 import 'package:flutter_highlight/themes/atom-one-light.dart';
 import 'package:highlight/highlight.dart' as hl;
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class MarkdownRenderer extends GetView {
   const MarkdownRenderer(this.text, {super.key});
@@ -18,9 +20,61 @@ class MarkdownRenderer extends GetView {
       text,
       useDollarSignsForLatex: true,
       style: TextStyle(color: C.black.r, fontSize: 16, height: 1.5),
-      followLinkColor: true,
       codeBuilder: (BuildContext context, String name, String code, bool closed) {
         return _CodeBlockView(language: name, code: code);
+      },
+      linkBuilder: (context, text, url, style) {
+        return Text.rich(
+          text,
+          style: style.copyWith(
+            decoration: TextDecoration.underline,
+          ),
+        );
+      },
+      imageBuilder: (context, imageUrl) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+          child: ExtendedImage.network(
+            imageUrl,
+            fit: BoxFit.contain,
+            cache: true,
+            borderRadius: BorderRadius.circular(10),
+            loadStateChanged: (state) {
+              switch (state.extendedImageLoadState) {
+                case LoadState.loading:
+                  return Container(
+                    width: double.infinity,
+                    height: 100,
+                    color: C.g1.r,
+                    child: Center(
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: C.black.r,
+                        ),
+                      ),
+                    ),
+                  );
+                case LoadState.completed:
+                  return null;
+                case LoadState.failed:
+                  return Container(
+                    width: double.infinity,
+                    height: 100,
+                    color: C.g1.r,
+                    child: Center(
+                      child: Icon(LucideIcons.imageOff, size: 40, color: C.black.r),
+                    ),
+                  );
+              }
+            },
+          ),
+        );
+      },
+      onLinkTap: (url, title) async {
+        await launchUrlString(url);
       },
     );
   }
@@ -40,7 +94,7 @@ class _CodeBlockView extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.all(4),
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       decoration: BoxDecoration(color: C.g1.r, borderRadius: BorderRadius.circular(10)),
       clipBehavior: Clip.antiAlias,
       child: Stack(
@@ -138,6 +192,7 @@ class _RichHighlightCode extends StatelessWidget {
       TextSpan(
         style: TextStyle(
           fontFamilyFallback: [
+            'MapleMono',
             'Menlo',
             'Consolas',
             'Roboto Mono',

@@ -85,24 +85,33 @@ class ChatScreen extends GetView<ChatScreenController> {
           children: [
             Expanded(
               flex: 1,
-              child: Obx(
-                () => AnimatedContainer(
-                  duration: const Duration(milliseconds: 328),
-                  decoration: BoxDecoration(
-                    // NOTE: ListView is reversed
-                    border: Border(
-                      top:
-                          controller.scrollOffsetPercent.value < 1
-                              ? BorderSide(color: C.g2.r.withAlpha(160), width: 1)
-                              : BorderSide(color: C.g2.r.withAlpha(0), width: 1),
-                      bottom:
-                          controller.scrollOffsetPercent.value > 0
-                              ? BorderSide(color: C.g2.r.withAlpha(160), width: 1)
-                              : BorderSide(color: C.g2.r.withAlpha(0), width: 1),
-                    ),
+              child: Stack(
+                children: [
+                  ChatContent(tabletWidth: tabletWidth),
+                  GetBuilder<ChatScreenController>(
+                    id: 'scrollBorder',
+                    builder: (_) {
+                      final percent = controller.scrollOffsetPercent;
+                      return IgnorePointer(
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 240),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top:
+                                  percent < 1
+                                      ? BorderSide(color: C.g2.r.withAlpha(160), width: 1)
+                                      : BorderSide(color: C.g2.r.withAlpha(0), width: 1),
+                              bottom:
+                                  percent > 0
+                                      ? BorderSide(color: C.g2.r.withAlpha(160), width: 1)
+                                      : BorderSide(color: C.g2.r.withAlpha(0), width: 1),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  child: ChatContent(tabletWidth: tabletWidth),
-                ),
+                ],
               ),
             ),
             Align(
