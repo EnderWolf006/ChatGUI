@@ -18,6 +18,17 @@ class MarkdownRenderer extends GetView {
   Widget build(BuildContext context) {
     return GptMarkdown(
       text,
+      highlightBuilder: (context, text, style) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          decoration: BoxDecoration(
+            color: C.g2.r,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Text(text, style: style),
+        );
+      },
       useDollarSignsForLatex: true,
       style: TextStyle(color: C.black.r, fontSize: 16, height: 1.5),
       codeBuilder: (BuildContext context, String name, String code, bool closed) {
@@ -26,9 +37,7 @@ class MarkdownRenderer extends GetView {
       linkBuilder: (context, text, url, style) {
         return Text.rich(
           text,
-          style: style.copyWith(
-            decoration: TextDecoration.underline,
-          ),
+          style: style.copyWith(decoration: TextDecoration.underline),
         );
       },
       imageBuilder: (context, imageUrl) {

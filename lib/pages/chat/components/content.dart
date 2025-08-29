@@ -56,16 +56,21 @@ class ChatContentUserBubble extends GetView<ChatScreenController> {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 12),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-        constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.75),
-        decoration: BoxDecoration(color: C.g1.r, borderRadius: BorderRadius.circular(22)),
-        child: Text(
-          "User Message",
-          style: TextStyle(color: C.black.r, fontSize: 16, height: 1.5),
+    return SelectionArea(
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+          constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.75),
+          decoration: BoxDecoration(
+            color: C.g1.r,
+            borderRadius: BorderRadius.circular(22),
+          ),
+          child: Text(
+            "User Message",
+            style: TextStyle(color: C.black.r, fontSize: 16, height: 1.5),
+          ),
         ),
       ),
     );
@@ -79,9 +84,7 @@ class ChatContentAssistantBubble extends GetView<ChatScreenController> {
 
   @override
   Widget build(BuildContext context) {
-    return SelectableRegion(
-      focusNode: FocusNode(),
-      selectionControls: materialTextSelectionControls,
+    return SelectionArea(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 12),
         child: MarkdownRenderer(testMd),
@@ -122,7 +125,8 @@ const testMd = r'''## 二级标题
 > 安得广厦千万间，大庇天下寒士俱欢颜！风雨不动安如山。
 > > 呜呼！何时眼前突兀见此屋，吾庐独破受冻死亦足！
 
-这是行内代码：`int a=1;`。这是代码块：
+这是行内代码`int a=1`111
+这是代码块：
 
 ```c++
 int main(int argc , char** argv){
