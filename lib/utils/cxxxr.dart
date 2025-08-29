@@ -33,5 +33,5 @@ class C {
   C({required this.d, required this.l});
   final Color d; // raw dark color
   final Color l; // raw light color
-  Color get r => Get.context!.isDarkMode ? d : l;
+  Color get r => Get.context!.isDarkMode ? d : l; // read color
 }

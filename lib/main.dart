@@ -2,7 +2,6 @@ import 'package:chat_gui/theme/app_theme.dart';
 import 'package:chat_gui/utils/rx_persist.dart';
 import 'package:chat_gui/utils/translation_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
 import 'routes/app_pages.dart';

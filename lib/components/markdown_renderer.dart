@@ -38,55 +38,53 @@ class _CodeBlockView extends StatelessWidget {
     final themeMap = isDark ? atomOneDarkTheme : atomOneLightTheme;
     final lang = _normalizeLanguage(langLabel);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Container(
-        decoration: BoxDecoration(color: C.g1.r, borderRadius: BorderRadius.circular(10)),
-        clipBehavior: Clip.antiAlias,
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 42, left: 12, right: 12, bottom: 12),
-              child: _RichHighlightCode(
-                code: code.trimRight(),
-                language: lang,
-                theme: themeMap,
+    return Container(
+      margin: EdgeInsets.all(4),
+      decoration: BoxDecoration(color: C.g1.r, borderRadius: BorderRadius.circular(10)),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 42, left: 12, right: 12, bottom: 12),
+            child: _RichHighlightCode(
+              code: code.trimRight(),
+              language: lang,
+              theme: themeMap,
+            ),
+          ),
+          Positioned(
+            top: 12,
+            left: 12,
+            child: Text(
+              langLabel.isEmpty
+                  ? ''
+                  : langLabel[0].toUpperCase() + langLabel.substring(1),
+              style: TextStyle(
+                color: C.black.r,
+                fontSize: 14,
+                height: 1,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            Positioned(
-              top: 12,
-              left: 12,
-              child: Text(
-                langLabel.isEmpty
-                    ? ''
-                    : langLabel[0].toUpperCase() + langLabel.substring(1),
-                style: TextStyle(
-                  color: C.black.r,
-                  fontSize: 14,
-                  height: 1,
-                  fontWeight: FontWeight.w700,
-                ),
+          ),
+          Positioned(
+            top: 4,
+            right: 4,
+            child: IconButton(
+              onPressed: () async {
+                await Clipboard.setData(ClipboardData(text: code));
+              },
+              icon: Icon(LucideIcons.copy),
+              constraints: BoxConstraints(),
+              iconSize: 14,
+              style: IconButton.styleFrom(
+                foregroundColor: C.black.r,
+                padding: EdgeInsets.all(8),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ),
-            Positioned(
-              top: 4,
-              right: 4,
-              child: IconButton(
-                onPressed: () async {
-                  await Clipboard.setData(ClipboardData(text: code));
-                },
-                icon: Icon(LucideIcons.copy),
-                constraints: BoxConstraints(),
-                iconSize: 14,
-                style: IconButton.styleFrom(
-                  foregroundColor: C.black.r,
-                  padding: EdgeInsets.all(8),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
