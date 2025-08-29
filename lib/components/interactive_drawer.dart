@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:chat_gui/utils/cxxxr.dart';
 import 'package:flutter/material.dart';
 
 /// Drawer placement side.
@@ -99,6 +100,7 @@ class InteractiveDrawer extends StatefulWidget {
     this.elevation = 16.0,
     this.semanticLabel,
     this.enableDrawerTapToClose = false,
+    this.tabletMode = false,
   });
 
   /// The main content; it will translate horizontally with the drawer progress.
@@ -133,6 +135,17 @@ class InteractiveDrawer extends StatefulWidget {
 
   /// Whether tapping blank area inside the drawer closes it.
   final bool enableDrawerTapToClose;
+
+  /// Tablet mode: turns the drawer into a persistent left/right sidebar.
+  /// When enabled:
+  /// - Drawer occupies width = [drawerWidth] (if provided) else 250 when fully open.
+  /// - Main [child] is always visible (no scrim overlay).
+  /// - Opening/closing uses slide (translate) + fade; does NOT scale width.
+  ///   The main content is padded horizontally as the sidebar reveals so that
+  ///   when closed it takes full width, and when open it sits beside the sidebar.
+  /// - Drag gestures & scrim tap are disabled (programmatic control still works).
+  /// - Other parameters (e.g. controller / dismiss on back) still apply.
+  final bool tabletMode;
 
   /// Material elevation for the drawer.
   final double elevation;
@@ -225,6 +238,10 @@ class _InteractiveDrawerState extends State<InteractiveDrawer>
 
   /// Draggable child with an in-child scrim (does not cover the drawer).
   Widget _buildDraggableChild() {
+    if (widget.tabletMode) {
+      // In tablet mode the child is static (no translation, no scrim).
+      return widget.child;
+    }
     final double dx = (_isLeft ? 1 : -1) * _drawerWidth * _anim.value;
     final double scrimOpacity = (widget.maxScrimOpacity * _anim.value).clamp(0.0, 1.0);
 
@@ -256,6 +273,37 @@ class _InteractiveDrawerState extends State<InteractiveDrawer>
 
   /// Draggable drawer that follows progress (slides from offscreen to edge).
   Widget _buildDraggableDrawer() {
+    if (widget.tabletMode) {
+      // Slide + fade (width fixed to configured _drawerWidth). When closed: translated fully offscreen.
+      final targetWidth = _drawerWidth; // already resolved in build()
+      final double translateX = (_isLeft ? -1 : 1) * (1 - _anim.value) * targetWidth;
+      final drawerBody = Material(
+        elevation: widget.elevation,
+        clipBehavior: Clip.antiAlias,
+        child: Semantics(
+          label: widget.semanticLabel,
+          container: true,
+          child: widget.drawer,
+        ),
+      );
+      return Align(
+        alignment: _isLeft ? Alignment.centerLeft : Alignment.centerRight,
+        child: SizedBox(
+          width: targetWidth,
+          child: Opacity(
+            opacity: _anim.value.clamp(0.0, 1.0),
+            child: Transform.translate(
+              offset: Offset(translateX, 0),
+              child: IgnorePointer(
+                // Only interactive when sufficiently open.
+                ignoring: _anim.value < 0.95,
+                child: drawerBody,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
     // When closed (value=0), drawer is fully offscreen.
     // It moves toward 0 offset as it opens.
     final double hiddenOffset = _isLeft ? -_drawerWidth : _drawerWidth;
@@ -295,35 +343,62 @@ class _InteractiveDrawerState extends State<InteractiveDrawer>
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        _drawerWidth = widget.drawerWidth ?? math.max(300.0, constraints.maxWidth * 0.80);
+    return Material(
+      color: C.white.r,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          if (widget.tabletMode) {
+            _drawerWidth = widget.drawerWidth ?? 250.0; // tablet default 250
+          } else {
+            _drawerWidth =
+                widget.drawerWidth ?? math.max(300.0, constraints.maxWidth * 0.80);
+          }
 
-        return WillPopScope(
-          onWillPop: () async {
-            if (_controllerProxy.isOpen) {
-              _controllerProxy.close();
-              return false;
-            }
-            return true;
-          },
-          child: AnimatedBuilder(
-            animation: _anim,
-            builder: (context, _) {
-              return Stack(
-                fit: StackFit.expand,
-                children: [
-                  // 1) Background: nothing
-                  // 2) Child: full-screen draggable with in-child scrim
-                  _buildDraggableChild(),
-                  // 3) Drawer: slides in and is also draggable (on top for hit-testing)
-                  _buildDraggableDrawer(),
-                ],
-              );
+          return WillPopScope(
+            onWillPop: () async {
+              if (_controllerProxy.isOpen) {
+                _controllerProxy.close();
+                return false;
+              }
+              return true;
             },
-          ),
-        );
-      },
+            child: AnimatedBuilder(
+              animation: _anim,
+              builder: (context, _) {
+                if (widget.tabletMode) {
+                  // Stack: main content with dynamic padding + sliding drawer on top alignment.
+                  final sidePadding = _drawerWidth * _anim.value;
+                  EdgeInsets mainPadding;
+                  if (_isLeft) {
+                    mainPadding = EdgeInsets.only(left: sidePadding);
+                  } else {
+                    mainPadding = EdgeInsets.only(right: sidePadding);
+                  }
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      // Main content shifts via padding to make space as drawer reveals.
+                      AnimatedContainer(
+                        duration: const Duration(
+                          milliseconds: 16,
+                        ), // near-frame for smoothness
+                        curve: Curves.linear,
+                        padding: mainPadding,
+                        child: _buildDraggableChild(),
+                      ),
+                      _buildDraggableDrawer(),
+                    ],
+                  );
+                }
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [_buildDraggableChild(), _buildDraggableDrawer()],
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }

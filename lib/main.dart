@@ -11,6 +11,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Init persistent store
   await StorageManager.initStorage('ChatGUI');
+  
   // Init translations
   await TranslationService.init();
   final store = await Get.putAsync<AppStore>(() async => AppStore().init());

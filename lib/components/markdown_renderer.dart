@@ -39,6 +39,7 @@ class _CodeBlockView extends StatelessWidget {
     final lang = _normalizeLanguage(langLabel);
 
     return Container(
+      width: double.infinity,
       margin: EdgeInsets.all(4),
       decoration: BoxDecoration(color: C.g1.r, borderRadius: BorderRadius.circular(10)),
       clipBehavior: Clip.antiAlias,
