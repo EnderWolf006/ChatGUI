@@ -13,7 +13,7 @@ class ChatScreenController extends GetxController {
   final RxString searchInputText = ''.obs;
 
   late final InteractiveDrawerController drawerController;
-  double scrollOffsetPercent = 0.0;
+  double scrollOffsetPercent = -1;
 
   @override
   void onInit() {
@@ -48,9 +48,13 @@ class ChatScreenController extends GetxController {
         return;
       }
       final max = scrollController.position.maxScrollExtent;
-      final current = scrollController.offset.clamp(0, max);
-      final percent = max == 0 ? 0.0 : (current / max).clamp(0.0, 1.0);
-      scrollOffsetPercent = percent;
+      if (max == 0) {
+        scrollOffsetPercent = -1;
+      } else {
+        final current = scrollController.offset.clamp(0, max);
+        final percent = max == 0 ? 0.0 : (current / max).clamp(0.0, 1.0);
+        scrollOffsetPercent = percent;
+      }
       update(['scrollBorder']);
     });
   }

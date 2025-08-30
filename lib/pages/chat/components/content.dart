@@ -12,38 +12,41 @@ class ChatContent extends GetView<ChatScreenController> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
-      child: SingleChildScrollView(
-        reverse: true,
-        padding: EdgeInsets.zero,
-        controller: controller.scrollController,
-        physics: const BouncingScrollPhysics(),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints:
-                tabletWidth > 0
-                    ? BoxConstraints(maxWidth: tabletWidth.toDouble())
-                    : BoxConstraints(),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ...[
-                      for (var i = 0; i < 11; i++)
-                        [
-                          ChatContentUserBubble(constraints),
-                          SizedBox(height: 12),
-                          ChatContentAssistantBubble(constraints),
-                          SizedBox(height: 12),
-                        ],
-                    ].expand((e) => e),
-                  ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Align(
+            alignment: Alignment.topCenter,
+            child: ListView.separated(
+              reverse: true,
+              padding: EdgeInsets.zero,
+              controller: controller.scrollController,
+              physics: const BouncingScrollPhysics(),
+              itemCount: 12,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Align(
+                  alignment: Alignment.center,
+                  child: ConstrainedBox(
+                    constraints:
+                        tabletWidth > 0
+                            ? BoxConstraints(maxWidth: tabletWidth.toDouble())
+                            : BoxConstraints(),
+                    child: Builder(
+                      builder: (context) {
+                        if (index % 2 == 0) {
+                          return ChatContentUserBubble(constraints);
+                        } else {
+                          return ChatContentAssistantBubble(constraints);
+                        }
+                      },
+                    ),
+                  ),
                 );
               },
+              separatorBuilder: (context, index) => SizedBox(height: 8),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -84,6 +87,7 @@ class ChatContentAssistantBubble extends GetView<ChatScreenController> {
 
   @override
   Widget build(BuildContext context) {
+    print("Building Assistant Bubble");
     return SelectionArea(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 12),
@@ -158,7 +162,7 @@ $C_{m\times k}=A_{m\times n}\cdot B_{n\times k}$
 
 这是一张图片：
 
-![1fa0f7b958d4234db58eac4f75318d7b.jpeg](https://cdn.imalan.cn/img/post/2934349b033b5bb5a19efc7233d3d539b700bcf5.jpg)
+![1fa0f7b958d4234db58eac4f75318d7b.jpeg](https://www.fahimai.com/wp-content/uploads/2024/05/openai-chatgpt-CTA.png)
 
 这是表格：
 

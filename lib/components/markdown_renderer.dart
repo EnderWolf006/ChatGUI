@@ -16,75 +16,79 @@ class MarkdownRenderer extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    return GptMarkdown(
-      text,
-      highlightBuilder: (context, text, style) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          decoration: BoxDecoration(
-            color: C.g2.r,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Text(text, style: style),
-        );
-      },
-      useDollarSignsForLatex: true,
-      style: TextStyle(color: C.black.r, fontSize: 16, height: 1.5),
-      codeBuilder: (BuildContext context, String name, String code, bool closed) {
-        return _CodeBlockView(language: name, code: code);
-      },
-      linkBuilder: (context, text, url, style) {
-        return Text.rich(
-          text,
-          style: style.copyWith(decoration: TextDecoration.underline),
-        );
-      },
-      imageBuilder: (context, imageUrl) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-          child: ExtendedImage.network(
-            imageUrl,
-            fit: BoxFit.contain,
-            cache: true,
-            borderRadius: BorderRadius.circular(10),
-            loadStateChanged: (state) {
-              switch (state.extendedImageLoadState) {
-                case LoadState.loading:
-                  return Container(
-                    width: double.infinity,
-                    height: 100,
-                    color: C.g1.r,
-                    child: Center(
-                      child: SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: C.black.r,
+    return RepaintBoundary(
+      child: GptMarkdown(
+        text,
+        highlightBuilder: (context, text, style) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              color: C.g2.r,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(text, style: style),
+          );
+        },
+        useDollarSignsForLatex: true,
+        style: TextStyle(color: C.black.r, fontSize: 16, height: 1.5),
+        codeBuilder: (BuildContext context, String name, String code, bool closed) {
+          return _CodeBlockView(language: name, code: code);
+        },
+        linkBuilder: (context, text, url, style) {
+          return Text.rich(
+            text,
+            style: style.copyWith(decoration: TextDecoration.underline),
+          );
+        },
+        imageBuilder: (context, imageUrl) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+            child: ExtendedImage.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              cache: true,
+              clipBehavior: Clip.antiAlias,
+              height: 240,
+              borderRadius: BorderRadius.circular(10),
+              loadStateChanged: (state) {
+                switch (state.extendedImageLoadState) {
+                  case LoadState.loading:
+                    return Container(
+                      width: double.infinity,
+                      height: 240,
+                      color: C.g1.r,
+                      child: Center(
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: C.black.r,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                case LoadState.completed:
-                  return null;
-                case LoadState.failed:
-                  return Container(
-                    width: double.infinity,
-                    height: 100,
-                    color: C.g1.r,
-                    child: Center(
-                      child: Icon(LucideIcons.imageOff, size: 40, color: C.black.r),
-                    ),
-                  );
-              }
-            },
-          ),
-        );
-      },
-      onLinkTap: (url, title) async {
-        await launchUrlString(url);
-      },
+                    );
+                  case LoadState.completed:
+                    return null;
+                  case LoadState.failed:
+                    return Container(
+                      width: double.infinity,
+                      height: 240,
+                      color: C.g1.r,
+                      child: Center(
+                        child: Icon(LucideIcons.imageOff, size: 40, color: C.black.r),
+                      ),
+                    );
+                }
+              },
+            ),
+          );
+        },
+        onLinkTap: (url, title) async {
+          await launchUrlString(url);
+        },
+      ),
     );
   }
 }
@@ -178,7 +182,7 @@ String _normalizeLanguage(String input) {
   }
 }
 
-class _RichHighlightCode extends StatelessWidget {
+class _RichHighlightCode extends StatefulWidget {
   const _RichHighlightCode({
     required this.code,
     required this.language,
@@ -190,17 +194,45 @@ class _RichHighlightCode extends StatelessWidget {
   final Map<String, TextStyle> theme;
 
   @override
-  Widget build(BuildContext context) {
-    final res = hl.highlight.parse(
-      code,
-      language: (language == 'plaintext' || language.isEmpty) ? null : language,
-      autoDetection: (language == 'plaintext' || language.isEmpty),
-    );
+  State<_RichHighlightCode> createState() => _RichHighlightCodeState();
+}
 
+class _RichHighlightCodeState extends State<_RichHighlightCode> {
+  // Cache parsed highlight nodes so we don't parse on every rebuild.
+  late List<hl.Node> _nodes;
+
+  @override
+  void initState() {
+    super.initState();
+    _parse();
+  }
+
+  @override
+  void didUpdateWidget(covariant _RichHighlightCode oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.code != widget.code || oldWidget.language != widget.language) {
+      _parse();
+    }
+  }
+
+  void _parse() {
+    final res = hl.highlight.parse(
+      widget.code,
+      language:
+          (widget.language == 'plaintext' || widget.language.isEmpty)
+              ? null
+              : widget.language,
+      autoDetection: (widget.language == 'plaintext' || widget.language.isEmpty),
+    );
+    _nodes = res.nodes ?? const [];
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Text.rich(
       TextSpan(
         style: TextStyle(
-          fontFamilyFallback: [
+          fontFamilyFallback: const [
             'MapleMono',
             'Menlo',
             'Consolas',
@@ -212,9 +244,8 @@ class _RichHighlightCode extends StatelessWidget {
           color: C.black.r,
           height: 1.4,
         ),
-        children: _toTextSpans(res.nodes ?? const []),
+        children: _toTextSpans(_nodes),
       ),
-      // softWrap: true,
     );
   }
 
@@ -222,10 +253,10 @@ class _RichHighlightCode extends StatelessWidget {
     final spans = <TextSpan>[];
     for (final node in nodes) {
       if (node.value != null) {
-        final style = node.className != null ? theme[node.className!] : null;
+        final style = node.className != null ? widget.theme[node.className!] : null;
         spans.add(TextSpan(text: node.value, style: style));
       } else if (node.children != null) {
-        final style = node.className != null ? theme[node.className!] : null;
+        final style = node.className != null ? widget.theme[node.className!] : null;
         spans.add(TextSpan(style: style, children: _toTextSpans(node.children!)));
       }
     }

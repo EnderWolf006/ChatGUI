@@ -88,28 +88,34 @@ class ChatScreen extends GetView<ChatScreenController> {
               child: Stack(
                 children: [
                   ChatContent(tabletWidth: tabletWidth),
-                  GetBuilder<ChatScreenController>(
-                    id: 'scrollBorder',
-                    builder: (_) {
-                      final percent = controller.scrollOffsetPercent;
-                      return IgnorePointer(
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 240),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              top:
-                                  percent < 1
-                                      ? BorderSide(color: C.g2.r.withAlpha(160), width: 1)
-                                      : BorderSide(color: C.g2.r.withAlpha(0), width: 1),
-                              bottom:
-                                  percent > 0
-                                      ? BorderSide(color: C.g2.r.withAlpha(160), width: 1)
-                                      : BorderSide(color: C.g2.r.withAlpha(0), width: 1),
+                  Positioned.fill(
+                    child: GetBuilder<ChatScreenController>(
+                      id: 'scrollBorder',
+                      builder: (_) {
+                        final percent = controller.scrollOffsetPercent;
+                        return IgnorePointer(
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 180),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                top: BorderSide(
+                                  color: C.g2.r.withAlpha(
+                                    percent < 1 && percent != -1 ? 160 : 0,
+                                  ),
+                                  width: 1,
+                                ),
+                                bottom: BorderSide(
+                                  color: C.g2.r.withAlpha(
+                                    percent > 0 && percent != -1 ? 160 : 0,
+                                  ),
+                                  width: 1,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
