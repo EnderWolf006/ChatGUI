@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  chinese_font_library:
+    dependency: "direct main"
+    description:
+      name: chinese_font_library
+      sha256: f6c18eb58c1514a95e4ed9a7e2f6702be1333b67e4226976b333e5918021c1df
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   clock:
     dependency: transitive
     description:
@@ -272,9 +280,11 @@ packages:
   md_single_block_renderer:
     dependency: "direct main"
     description:
-      path: "/Users/doge/Documents/APP/md_single_block_renderer"
-      relative: false
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: aaab5a7ca1cc5c02767cace2962c513d246530f3
+      url: "https://github.com/EnderWolf006/md_single_block_renderer.git"
+    source: git
     version: "0.0.1"
   meta:
     dependency: transitive

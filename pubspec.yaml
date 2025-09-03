@@ -21,8 +21,11 @@ dependencies:
   highlight: ^0.7.0
   url_launcher: ^6.3.2
   extended_image: ^10.0.1
+  chinese_font_library: ^1.2.0
   md_single_block_renderer: 
-    path: /Users/doge/Documents/APP/md_single_block_renderer
+    git: 
+      url: https://github.com/EnderWolf006/md_single_block_renderer.git
+      
 dev_dependencies:
   flutter_test:
     sdk: flutter

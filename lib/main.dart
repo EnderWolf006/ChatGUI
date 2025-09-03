@@ -1,6 +1,7 @@
 import 'package:chat_gui/theme/app_theme.dart';
 import 'package:chat_gui/utils/rx_persist.dart';
 import 'package:chat_gui/utils/translation_service.dart';
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -29,8 +30,8 @@ class MainApp extends StatelessWidget {
         title: 'ChatGUI',
         themeMode: store.themeMode.value,
         debugShowCheckedModeBanner: false,
-        theme: lightTheme,
-        darkTheme: darkTheme,
+        theme: lightTheme.useSystemChineseFont(Theme.of(context).brightness),
+        darkTheme: darkTheme.useSystemChineseFont(Theme.of(context).brightness),
         initialRoute: AppPages.initial,
         getPages: AppPages.routes,
         locale: Get.deviceLocale,
