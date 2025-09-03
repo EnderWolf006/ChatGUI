@@ -3,6 +3,8 @@ import 'package:chat_gui/pages/chat/controller.dart';
 import 'package:chat_gui/utils/cxxxr.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:md_single_block_renderer/md_single_block_renderer.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ChatContent extends GetView<ChatScreenController> {
   final int tabletWidth;
@@ -12,41 +14,67 @@ class ChatContent extends GetView<ChatScreenController> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Align(
-            alignment: Alignment.topCenter,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Obx(
+          () => SelectionArea(
             child: ListView.separated(
               reverse: true,
               padding: EdgeInsets.zero,
               controller: controller.scrollController,
               physics: const BouncingScrollPhysics(),
-              itemCount: 12,
+              itemCount: controller.testMdBlocks.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return Align(
-                  alignment: Alignment.center,
+                  alignment: Alignment.topCenter,
                   child: ConstrainedBox(
                     constraints:
                         tabletWidth > 0
                             ? BoxConstraints(maxWidth: tabletWidth.toDouble())
                             : BoxConstraints(),
-                    child: Builder(
-                      builder: (context) {
-                        if (index % 2 == 0) {
-                          return ChatContentUserBubble(constraints);
-                        } else {
-                          return ChatContentAssistantBubble(constraints);
-                        }
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Align(
+                          alignment: Alignment.centerLeft,
+                          child: MarkdownSingleBlockRenderer(
+                            controller.testMdBlocks[controller.testMdBlocks.length -
+                                index -
+                                1],
+                            baseTextStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontSize: 16,
+                              height: 1.5,
+                            ),
+                            onTapLink: (url) {
+                              print(url);
+                              launchUrlString(url);
+                            },
+                          ),
+                        );
+                        // if (index == 0) {
+                        //   return Obx(
+                        //     () => ChatContentAssistantBubble(
+                        //       constraints,
+                        //       controller.testStreamMd.value,
+                        //     ),
+                        //   );
+                        // }
+                        // if (index % 2 == 0) {
+                        //   return ChatContentUserBubble(constraints);
+                        // } else {
+                        //   return ChatContentAssistantBubble(constraints, testMd);
+                        // }
                       },
                     ),
                   ),
                 );
               },
-              separatorBuilder: (context, index) => SizedBox(height: 8),
+              separatorBuilder:
+                  (context, index) => Container(color: Colors.red, height: 0),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
@@ -81,9 +109,10 @@ class ChatContentUserBubble extends GetView<ChatScreenController> {
 }
 
 class ChatContentAssistantBubble extends GetView<ChatScreenController> {
-  const ChatContentAssistantBubble(this.constraints, {super.key});
+  const ChatContentAssistantBubble(this.constraints, this.text, {super.key});
 
   final BoxConstraints constraints;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +120,7 @@ class ChatContentAssistantBubble extends GetView<ChatScreenController> {
     return SelectionArea(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 12),
-        child: MarkdownRenderer(testMd),
+        // child: MarkdownRenderer(text),
       ),
     );
   }
@@ -129,12 +158,19 @@ const testMd = r'''## 二级标题
 > 安得广厦千万间，大庇天下寒士俱欢颜！风雨不动安如山。
 > > 呜呼！何时眼前突兀见此屋，吾庐独破受冻死亦足！
 
-这是行内代码`int a=1`111
-这是代码块：
+这是行内代码：`int a=1;`。这是代码块：
 
 ```c++
 int main(int argc , char** argv){
-    std::cout << "Hello World!\n";
+    std::cout << "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";
+    std::cout << "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";
+    std::cout << "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";
+    std::cout << "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";
+    std::cout << "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";
+    std::cout << "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";
+    std::cout << "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";
+    std::cout << "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";
+    std::cout << "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";<< "Hello World!\n";
     return 0;
 }
 ```
@@ -162,13 +198,16 @@ $C_{m\times k}=A_{m\times n}\cdot B_{n\times k}$
 
 这是一张图片：
 
-![1fa0f7b958d4234db58eac4f75318d7b.jpeg](https://www.fahimai.com/wp-content/uploads/2024/05/openai-chatgpt-CTA.png)
+![1fa0f7b958d4234db58eac4f75318d7b.jpeg](https://cdn.imalan.cn/img/post/2934349b033b5bb5a19efc7233d3d539b700bcf5.jpg)
 
 这是表格：
 
-|表格|第一格表头 | 第二格表头|
-|--------- | -------------|------------|
-|内容单元格 |第一列第一格 | 内容单元格第二列第一格|
-|内容单元格 |第一列第二格 多加文字 | 内容单元格第二列第二格|
+第一格表头 | 第二格表头
+--------- | -------------
+内容单元格 第一列第一格 | 内容单元格第二列第一格
+内容单元格 第一列第二格 多加文字 | 内容单元格第二列第二格
 
-------''';
+水平分割线[^这是脚注]：
+
+------
+''';

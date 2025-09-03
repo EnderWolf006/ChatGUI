@@ -3,104 +3,118 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:flutter_highlight/themes/atom-one-dark.dart';
 import 'package:flutter_highlight/themes/atom-one-light.dart';
 import 'package:highlight/highlight.dart' as hl;
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class MarkdownRenderer extends GetView {
-  const MarkdownRenderer(this.text, {super.key});
-  final String text;
+// class MarkdownRenderer extends GetView {
+//   const MarkdownRenderer(this.text, {super.key});
+//   final String text;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return RepaintBoundary(
+//       child: GptMarkdown(
+//         text,
+//         highlightBuilder: (context, text, style) {
+//           return Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 6),
+//             margin: const EdgeInsets.symmetric(horizontal: 4),
+//             decoration: BoxDecoration(
+//               color: C.g2.r,
+//               borderRadius: BorderRadius.circular(6),
+//             ),
+//             child: Text(text, style: style),
+//           );
+//         },
+//         useDollarSignsForLatex: true,
+//         style: TextStyle(color: C.black.r, fontSize: 16, height: 1.5),
+//         codeBuilder: (BuildContext context, String name, String code, bool closed) {
+//           return _CodeBlockView(language: name, code: code);
+//         },
+//         linkBuilder: (context, text, url, style) {
+//           return Text.rich(
+//             text,
+//             style: style.copyWith(decoration: TextDecoration.underline),
+//           );
+//         },
+//         imageBuilder: (context, imageUrl) {
+//           return _ImageView(imageUrl: imageUrl);
+//         },
+//         onLinkTap: (url, title) async {
+//           await launchUrlString(url);
+//         },
+//       ),
+//     );
+//   }
+// }
+
+class _ImageView extends StatelessWidget {
+  const _ImageView({super.key, required this.imageUrl});
+
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: GptMarkdown(
-        text,
-        highlightBuilder: (context, text, style) {
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            decoration: BoxDecoration(
-              color: C.g2.r,
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Text(text, style: style),
-          );
-        },
-        useDollarSignsForLatex: true,
-        style: TextStyle(color: C.black.r, fontSize: 16, height: 1.5),
-        codeBuilder: (BuildContext context, String name, String code, bool closed) {
-          return _CodeBlockView(language: name, code: code);
-        },
-        linkBuilder: (context, text, url, style) {
-          return Text.rich(
-            text,
-            style: style.copyWith(decoration: TextDecoration.underline),
-          );
-        },
-        imageBuilder: (context, imageUrl) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-            child: ExtendedImage.network(
-              imageUrl,
-              fit: BoxFit.contain,
-              cache: true,
-              clipBehavior: Clip.antiAlias,
-              height: 240,
-              borderRadius: BorderRadius.circular(10),
-              loadStateChanged: (state) {
-                switch (state.extendedImageLoadState) {
-                  case LoadState.loading:
-                    return Container(
-                      width: double.infinity,
-                      height: 240,
-                      color: C.g1.r,
-                      child: Center(
-                        child: SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: C.black.r,
-                          ),
-                        ),
-                      ),
-                    );
-                  case LoadState.completed:
-                    return null;
-                  case LoadState.failed:
-                    return Container(
-                      width: double.infinity,
-                      height: 240,
-                      color: C.g1.r,
-                      child: Center(
-                        child: Icon(LucideIcons.imageOff, size: 40, color: C.black.r),
-                      ),
-                    );
-                }
-              },
-            ),
-          );
-        },
-        onLinkTap: (url, title) async {
-          await launchUrlString(url);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      child: ExtendedImage.network(
+        imageUrl,
+        fit: BoxFit.contain,
+        cache: true,
+        clipBehavior: Clip.antiAlias,
+        height: 240,
+        borderRadius: BorderRadius.circular(10),
+        loadStateChanged: (state) {
+          switch (state.extendedImageLoadState) {
+            case LoadState.loading:
+              return Container(
+                width: double.infinity,
+                height: 240,
+                color: C.g1.r,
+                child: Center(
+                  child: SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: C.black.r),
+                  ),
+                ),
+              );
+            case LoadState.completed:
+              return null;
+            case LoadState.failed:
+              return Container(
+                width: double.infinity,
+                height: 240,
+                color: C.g1.r,
+                child: Center(
+                  child: Icon(LucideIcons.imageOff, size: 40, color: C.black.r),
+                ),
+              );
+          }
         },
       ),
     );
   }
 }
 
-class _CodeBlockView extends StatelessWidget {
+class _CodeBlockView extends StatefulWidget {
   const _CodeBlockView({required this.language, required this.code});
   final String language;
   final String code;
 
   @override
+  State<_CodeBlockView> createState() => _CodeBlockViewState();
+}
+
+class _CodeBlockViewState extends State<_CodeBlockView> {
+  bool copied = false;
+
+  @override
   Widget build(BuildContext context) {
-    final langLabel = (language.isEmpty ? 'code' : language).toLowerCase();
+    final langLabel = (widget.language.isEmpty ? 'code' : widget.language).toLowerCase();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final themeMap = isDark ? atomOneDarkTheme : atomOneLightTheme;
     final lang = _normalizeLanguage(langLabel);
@@ -115,7 +129,7 @@ class _CodeBlockView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 42, left: 12, right: 12, bottom: 12),
             child: _RichHighlightCode(
-              code: code.trimRight(),
+              code: widget.code.trimRight(),
               language: lang,
               theme: themeMap,
             ),
@@ -123,15 +137,17 @@ class _CodeBlockView extends StatelessWidget {
           Positioned(
             top: 12,
             left: 12,
-            child: Text(
-              langLabel.isEmpty
-                  ? ''
-                  : langLabel[0].toUpperCase() + langLabel.substring(1),
-              style: TextStyle(
-                color: C.black.r,
-                fontSize: 14,
-                height: 1,
-                fontWeight: FontWeight.w700,
+            child: SelectionContainer.disabled(
+              child: Text(
+                langLabel.isEmpty
+                    ? ''
+                    : langLabel[0].toUpperCase() + langLabel.substring(1),
+                style: TextStyle(
+                  color: C.black.r,
+                  fontSize: 14,
+                  height: 1,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),
@@ -140,7 +156,7 @@ class _CodeBlockView extends StatelessWidget {
             right: 4,
             child: IconButton(
               onPressed: () async {
-                await Clipboard.setData(ClipboardData(text: code));
+                await Clipboard.setData(ClipboardData(text: widget.code));
               },
               icon: Icon(LucideIcons.copy),
               constraints: BoxConstraints(),

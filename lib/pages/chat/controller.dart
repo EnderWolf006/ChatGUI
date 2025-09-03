@@ -1,7 +1,9 @@
 import 'package:chat_gui/components/interactive_drawer.dart';
+import 'package:chat_gui/pages/chat/components/content.dart';
 import 'package:chat_gui/store/app_store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:md_single_block_renderer/md_single_block_renderer.dart';
 
 class ChatScreenController extends GetxController {
   late final ScrollController scrollController;
@@ -15,9 +17,18 @@ class ChatScreenController extends GetxController {
   late final InteractiveDrawerController drawerController;
   double scrollOffsetPercent = -1;
 
+  final testMdBlocks = <Block>[].obs;
+
+  final testStreamMd = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
+
+    markdownToBlocksAsync(testMd).then((List<Block> v) {
+      testMdBlocks.value = List<List<Block>>.generate(100, (_) => v).expand((e) => e).toList();
+      print(v);
+    });
 
     drawerController = InteractiveDrawerController(
       initialValue: Get.find<AppStore>().tabletMode.value ? 1.0 : 0.0,

@@ -1,6 +1,12 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
+import 'package:markdown/markdown.dart' as md;
+import 'package:chat_gui/pages/chat/components/content.dart';
 import 'package:chat_gui/pages/chat/controller.dart';
 import 'package:chat_gui/utils/cxxxr.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -56,7 +62,28 @@ class ChatInput extends GetView<ChatScreenController> {
                           bottom: 5,
                           right: 5,
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              // controller.testStreamMd.value = '';
+                              // Timer.periodic(
+                              //   const Duration(milliseconds: 16, microseconds: 667),
+                              //   (timer) {
+                              //     final progress =
+                              //         controller.testStreamMd.value.length /
+                              //         testMd.length;
+                              //     if (progress >= 1) {
+                              //       timer.cancel();
+                              //       return;
+                              //     }
+                              //     controller.testStreamMd.value = testMd.substring(
+                              //       0,
+                              //       min(
+                              //         (progress * testMd.length + 8).toInt(),
+                              //         testMd.length,
+                              //       ),
+                              //     );
+                              //   },
+                              // );
+                            },
                             icon: const Icon(LucideIcons.arrowUp),
                             padding: EdgeInsets.all(4),
                             constraints: BoxConstraints(),
